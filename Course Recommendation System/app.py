@@ -1,7 +1,9 @@
 #Core Packages
+from audioop import reverse
 import imp
 from secrets import choice
 from tkinter import Menu
+from unittest import result
 import streamlit as st
 import streamlit.components.v1 as stc
 
@@ -25,6 +27,17 @@ def vectorize_text_to_cosine_mat(data):
 
 
 #Recommendation System
+def get_recommendation(title,cosine_sim_mat,num_of_rec=5):
+    #indices of the course
+    courses_indices=pd.Series(df,index,index=df['course_title']).drop_duplicates()
+    #Index of the course
+    idx=courses_indices[title]
+
+    #Look into the cosine matrix for that index
+    sim_scores=list(enumerate(cosine_sim_mat[idx]))
+    sim_scores=sorted(sim_scores, key=lambda x: x[1],reverse=True)
+    return sim_scores[1:]
+
 #Search For Course
 def main():
     st.title("Course Recommendation App")
@@ -37,11 +50,17 @@ def main():
         st.dataframe(df.head(10))
     elif choice=="Recommend":
         st.subheader("Recommend Courses")
+        cosine_sim_mat=vectorize_text_to_cosine_mat(df['course_title'])
         search_term=st.text_input("Search")
         num_of_rec=st.sidebar.number_input("Namber",4,30,7)
         if st.button("Recommend"):
             if search_term is not None:
-                pass
+                try:
+                    result=get_recommendation(search_term,cosine_sim_mat,df,num_of_rec)
+                except Exception as e:
+                    result="Not Found"
+                   
+                st.write(result)
     else:
         st.subheader("About")
         st.text("Built with Streamlit & Pandas")
