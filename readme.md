@@ -1,6 +1,7 @@
 # A course recommendation app using Udemy Dataset
 
-# Live site => (https://share.streamlit.io/abdulawalemon1/course-recommedation-system/main/app.py)[https://share.streamlit.io/abdulawalemon1/course-recommedation-system/main/app.py]
+# Live site => 
+(https://share.streamlit.io/abdulawalemon1/course-recommedation-system/main/app.py)[https://share.streamlit.io/abdulawalemon1/course-recommedation-system/main/app.py]
 
 
 # Instructions:
