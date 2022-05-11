@@ -44,7 +44,7 @@ def get_recommendation(title, cosine_sim_mat, df, num_of_rec=5):
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
 
     selected_course_indices = [i[0] for i in sim_scores[1:]]
-    selected_course_scores = [i[0] for i in sim_scores[1:]]
+    selected_course_scores = [i[1] for i in sim_scores[1:]]
 
     # Get the dataframe & title
     result_df = df.iloc[selected_course_indices]
@@ -57,16 +57,14 @@ def get_recommendation(title, cosine_sim_mat, df, num_of_rec=5):
 
 # CSS Style
 RESULT_TEMP = """
-<div style="width:90%;height:100%;margin:1px;padding:5px;position:relative;border-radius:5px;box-shadow:0 0 15px 5px solid #ccc;background-color:#a8f0c6;border-left:5px solid #6c6c6c;">
-
+<div style="width:90%;height:100%;margin:1px;padding:5px;position:relative;border-radius:5px;border-bottom-right-radius: 60px;
+box-shadow:0 0 15px 5px #ccc; background-color: #a8f0c6;
+  border-left: 5px solid #6c6c6c;">
 <h4>{}</h4>
-<p style="color:blue;"><span style="color:black;">Score:</span>{}</p>
-<p style="color:blue;"><span style="color:black;"></span><a href="{}", target="_blank">Link</a></p>
-
-<p style="color:blue;"><span style="color:black;">Price:</span>{}</p>
-
-<p style="color:blue;"><span style="color:black;">Students:</span>{}</p>
-
+<p style="color:blue;"><span style="color:black;">📈Score::</span>{}</p>
+<p style="color:blue;"><span style="color:black;">🔗</span><a href="{}",target="_blank">Link</a></p>
+<p style="color:blue;"><span style="color:black;">💲Price:</span>{}</p>
+<p style="color:blue;"><span style="color:black;">🧑‍🎓👨🏽‍🎓 Students:</span>{}</p>
 </div>
 """
 
@@ -90,7 +88,8 @@ def main():
         st.dataframe(df.head(10))
     elif choice == "Recommend":
         st.subheader("Recommend Courses")
-        cosine_sim_mat = vectorize_text_to_cosine_mat(df['course_title'])
+        cosine_sim_mat = vectorize_text_to_cosine_mat(
+            df['course_title'])
         search_term = st.text_input("Search")
         num_of_rec = st.sidebar.number_input("Number", 4, 30, 7)
         if st.button("Recommend"):
